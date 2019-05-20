@@ -10,12 +10,13 @@ import android.view.ViewGroup
  * Created by User on 5/17/2019.
  */
 
-class RecyclerAdapter(private val meals:ArrayList<Meal>, private val mContext : Context) : RecyclerView.Adapter<MyHolder>() {
+class RecyclerAdapter(private val meals:ArrayList<Meal>, private val mContext : Context,
+                      private val itemClickListener: ItemClickListener) : RecyclerView.Adapter<MyHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
 
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
-        return MyHolder(view, mContext)
+        return MyHolder(view, mContext, itemClickListener)
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {

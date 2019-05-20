@@ -1,14 +1,20 @@
 package myapp.com.recycler_example
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.widget.GridLayout.VERTICAL
 import android.widget.Toast
+import android.support.v7.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.list_item.*
 import okhttp3.Response
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,14 +23,8 @@ import retrofit2.Retrofit
 
 
 
-class MainActivity : AppCompatActivity() {
-/*
-    private val API_BASE_URL = "https://www.themealdb.com/"
-    private val meals: Meal? = null
-    private var listMeal: List<Meal>? = null
-    private var recycler_view: RecyclerView? = null
-    private var adapter: RecyclerView.Adapter<*>? = null
-    private var layoutManager: RecyclerView.LayoutManager? = null*/
+class MainActivity : AppCompatActivity(), ItemClickListener {
+
 
     private lateinit var recyclerAdapter : RecyclerAdapter
     private lateinit var mealAPI : MealAPI
@@ -35,8 +35,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         initRetrofit()
         getLatestMeals()
-    }
 
+        search_button.setOnClickListener() {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
+    }
     private fun getLatestMeals() {
         mealAPI.getLatestMeals().enqueue(object : Callback<LatestMealResponse> {
             override fun onResponse(call: Call<LatestMealResponse>?, response: retrofit2.Response<LatestMealResponse>?) {
@@ -54,13 +58,45 @@ class MainActivity : AppCompatActivity() {
 
     private fun bindData(body: LatestMealResponse) {
 
-        recyclerAdapter = RecyclerAdapter(body.meals!!, this)
+        recyclerAdapter = RecyclerAdapter(body.meals!!, this, this)
         recycler_view.adapter = recyclerAdapter
         var layoutManager = GridLayoutManager(this, 2, VERTICAL, false)
         recycler_view.setLayoutManager(layoutManager)
-
     }
 
+    override fun onItemClicked(id: String) {
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra("id", id)
+        startActivity(intent)
+
+        Toast.makeText(applicationContext, id, Toast.LENGTH_SHORT).show()
+    }
+
+    /*override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        menuInflater.inflate(R.menu.menu, menu)
+        val searchItem = menu!!.findItem(R.id.search_item)
+        if(searchItem != null){
+            searchView = searchItem.actionView as SearchView
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if(newText!!.isNotEmpty()){
+
+                    }else{
+
+                    }
+                    return true
+                }
+
+            })
+        }
+        return true
+    }
+*/
     private fun initRetrofit() {
 
         val retrofit = Retrofit.Builder()

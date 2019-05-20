@@ -28,4 +28,7 @@ class Meal {
 
     @SerializedName("strTags")
     val tag : String? = null
+
+    @SerializedName("strInstructions")
+    val instruction : String? = null
 }
