@@ -24,15 +24,16 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:textSize="25sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold|italic"
+            android:textColor="#292828"/>
 
         <TextView
             android:id="@+id/detail_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textColor="#da8282"
+            android:textSize="18sp"/>
 
     </LinearLayout>
 </ScrollView>
